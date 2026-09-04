@@ -1,0 +1,10 @@
+# minimal starship prompt — fast on small VMs
+format = "$directory$git_branch$git_status$nodejs$line_break$character"
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+[nodejs]
+format = "via [$symbol($version )]($style)"
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[➜](bold red)"

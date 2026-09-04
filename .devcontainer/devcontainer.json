@@ -1,0 +1,17 @@
+{
+  // sandbox-setup devcontainer — reused by Daytona prebuilds AND `devcontainer up` locally.
+  // Daytona: Dashboard -> Prebuilds -> point at this repo. Every new workspace boots post-setup.
+  "name": "sandbox",
+  "image": "mcr.microsoft.com/devcontainers/base:debian",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  // Same script as GCP VMs -> identical env everywhere.
+  "postCreateCommand": "bash setup.sh --yes",
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
+    }
+  }
+}

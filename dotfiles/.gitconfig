@@ -1,0 +1,22 @@
+# sandbox-setup gitconfig — safe defaults for throwaway VMs
+# Machine-specific identity goes in ~/.gitconfig.local (not committed).
+[user]
+  name = REPLACE_ME
+  email = REPLACE_ME@example.com
+[init]
+  defaultBranch = main
+[pull]
+  ff = only
+[push]
+  autoSetupRemote = true
+[core]
+  editor = vim
+  autocrlf = input
+[credential "https://github.com"]
+  helper =
+  helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+  helper =
+  helper = !/usr/bin/gh auth git-credential
+[include]
+  path = ~/.gitconfig.local

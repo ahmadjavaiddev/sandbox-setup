@@ -1,0 +1,16 @@
+# cloudflared Zero Trust tunnel config TEMPLATE.
+# Copied to ~/.cloudflared/config.yml ONCE by setup.sh (never overwritten).
+# Steps after `cloudflared tunnel login`:
+#   1. cloudflared tunnel create <tunnel-name>   # prints UUID
+#   2. fill `tunnel:` below with the UUID
+#   3. cloudflared tunnel route dns <tunnel-name> app.example.com
+#   4. cloudflared tunnel run <tunnel-name>
+# Docs: https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/
+tunnel: REPLACE_WITH_TUNNEL_UUID
+credentials-file: /home/REPLACE_USER/.cloudflared/REPLACE_WITH_TUNNEL_UUID.json
+
+ingress:
+  - hostname: app.example.com
+    service: http://localhost:3000
+  # catch-all (required, must be last)
+  - service: http_status:404

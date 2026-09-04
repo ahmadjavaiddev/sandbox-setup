@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Helper: Zero Trust tunnel lifecycle. Assumes `cloudflared tunnel login` done once.
+#   cf-tunnel create myapp          # create tunnel + print UUID
+#   cf-tunnel run myapp             # run in foreground (uses ~/.cloudflared/config.yml tunnel id)
+#   cf-tunnel dns myapp app.example.com
+set -euo pipefail
+cmd="${1:-help}"; name="${2:-}"; extra="${3:-}"
+case "$cmd" in
+  create)
+    [ -z "$name" ] && { echo "usage: cf-tunnel create <tunnel-name>"; exit 1; }
+    cloudflared tunnel create "$name"
+    echo "-> paste the UUID into ~/.cloudflared/config.yml (tunnel: <uuid>)"
+    ;;
+  dns)
+    [ -z "$name" ] || [ -z "$extra" ] && { echo "usage: cf-tunnel dns <tunnel-name> <hostname>"; exit 1; }
+    cloudflared tunnel route dns "$name" "$extra"
+    ;;
+  run)
+    [ -z "$name" ] && { echo "usage: cf-tunnel run <tunnel-name>"; exit 1; }
+    exec cloudflared tunnel run "$name"
+    ;;
+  *) echo "usage: cf-tunnel {create|dns|run} <tunnel-name> [hostname]"; exit 1 ;;
+esac

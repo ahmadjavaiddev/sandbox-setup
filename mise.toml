@@ -1,0 +1,6 @@
+# sandbox-setup / mise.toml
+# Single source of truth for language runtimes. `mise install` in setup.sh reads this.
+# Pin major only -> auto security patches, same version on GCP + every Daytona box.
+
+[tools]
+node = "24"
