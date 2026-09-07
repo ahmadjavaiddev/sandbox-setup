@@ -1,0 +1,6 @@
+FROM node:24-bookworm
+RUN apt-get update && apt-get install -y --no-install-recommends git gh curl ca-certificates zsh && rm -rf /var/lib/apt/lists/*
+RUN npm install -g t3@nightly @openai/codex
+RUN arch="$(dpkg --print-architecture)" && curl -fL "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-${arch}" -o /usr/local/bin/cloudflared && chmod +x /usr/local/bin/cloudflared
+ENV OPENAI_BASE_URL=https://ai.tunly.cloud/v1
+ENV CODEX_API_BASE=https://ai.tunly.cloud/v1

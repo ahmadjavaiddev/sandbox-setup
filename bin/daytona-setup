@@ -10,7 +10,7 @@ if ! command -v daytona >/dev/null 2>&1; then
 fi
 daytona login --api-key="$DAYTONA_API_KEY" >/dev/null
 if ! daytona info "$NAME" --format json >/dev/null 2>&1; then
-  daytona create --name "$NAME" --image ubuntu:24.04 --cpu 4 --memory 8192 --disk 50 --auto-stop 0
+  daytona create --name "$NAME" --dockerfile Dockerfile.daytona --context . --cpu 4 --memory 8192 --disk 50 --auto-stop 0
 fi
 daytona exec "$NAME" -- bash -lc 'set -e; mkdir -p ~/.local/bin; npm config set prefix ~/.local; npm install -g t3@nightly @openai/codex; asset=amd64; [ "$(uname -m)" = aarch64 ] && asset=arm64; curl -fL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-$asset -o ~/.local/bin/cloudflared; chmod +x ~/.local/bin/cloudflared; printf "%s\n" "export PATH=\"$HOME/.local/bin:$PATH\"" "export OPENAI_BASE_URL=https://ai.tunly.cloud/v1" "export CODEX_API_BASE=https://ai.tunly.cloud/v1" >> ~/.bashrc; cp ~/.bashrc ~/.zshrc'
 echo "Ready: daytona ssh $NAME"
