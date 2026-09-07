@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+NAME="${1:-sandbox-setup}"
+: "${DAYTONA_API_KEY:?Set DAYTONA_API_KEY before running}"
+if ! command -v daytona >/dev/null 2>&1; then mkdir -p "$HOME/.local/bin"; arch="$(uname -m)"; [ "$arch" = x86_64 ] && asset=amd64 || asset=arm64; curl -fL "https://github.com/daytonaio/daytona/releases/latest/download/daytona-linux-${asset}" -o "$HOME/.local/bin/daytona"; chmod +x "$HOME/.local/bin/daytona"; export PATH="$HOME/.local/bin:$PATH"; fi
+daytona login --api-key="$DAYTONA_API_KEY" >/dev/null
+if ! daytona info "$NAME" --format json >/dev/null 2>&1; then daytona create --name "$NAME" --snapshot daytona-large --auto-stop 0 || daytona create --name "$NAME" --snapshot daytona-medium --auto-stop 0; fi
+daytona exec "$NAME" -- bash -lc 'set -e; mkdir -p ~/.local/bin; npm config set prefix ~/.local; npm install -g t3@nightly @openai/codex; asset=amd64; [ "$(uname -m)" = aarch64 ] && asset=arm64; curl -fL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-$asset -o ~/.local/bin/cloudflared; chmod +x ~/.local/bin/cloudflared; printf "%s\n" "export PATH=\"$HOME/.local/bin:$PATH\"" "export OPENAI_BASE_URL=https://ai.tunly.cloud/v1" "export CODEX_API_BASE=https://ai.tunly.cloud/v1" >> ~/.bashrc; cp ~/.bashrc ~/.zshrc'
+echo "Ready: daytona ssh $NAME"

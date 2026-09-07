@@ -12,6 +12,16 @@ curl -fsSL raw.githubusercontent.com/ahmadjavaiddev/sandbox-setup/main/setup.sh 
 
 Re-run anytime to sync N machines: `git pull && ./setup.sh` (idempotent, dotfiles never clobbered without backup).
 
+## Daytona (one command)
+
+Create the largest standard sandbox available on the plan (falls back to medium if large is unavailable):
+
+`ash
+DAYTONA_API_KEY=\your-key\ ./bin/daytona-setup [sandbox-name]
+`
+
+The key is read from the environment and never written to the repository. The sandbox installs git/gh, 3@nightly, and Codex CLI, with Codex pointed at https://ai.tunly.cloud/v1.
+
 ## Daytona (zero setup per workspace)
 
 1. Push this repo to GitHub.

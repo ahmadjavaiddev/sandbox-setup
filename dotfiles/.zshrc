@@ -1,4 +1,7 @@
 # sandbox-setup zshrc — shared across GCP + Daytona boxes
+# CliproxyProject endpoint for Codex/OpenAI-compatible clients.
+export OPENAI_BASE_URL=" \
+export CODEX_API_BASE=\\n
 export PATH="$HOME/.local/bin:$HOME/go/bin:$HOME/.cloudflared:$PATH"
 
 # mise (node 24) — single version source is ../mise.toml
