@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 NAME="${1:-sandbox-setup}"
+VOLUME="${NAME}-workspace-50"
 : "${DAYTONA_API_KEY:?Set DAYTONA_API_KEY before running}"
 if ! command -v daytona >/dev/null 2>&1; then
   mkdir -p "$HOME/.local/bin"
@@ -9,8 +10,9 @@ if ! command -v daytona >/dev/null 2>&1; then
   chmod +x "$HOME/.local/bin/daytona"; export PATH="$HOME/.local/bin:$PATH"
 fi
 daytona login --api-key="$DAYTONA_API_KEY" >/dev/null
+if ! daytona volume get "$VOLUME" --format json >/dev/null 2>&1; then daytona volume create "$VOLUME" --size 50; fi
 if ! daytona info "$NAME" --format json >/dev/null 2>&1; then
-  daytona create --name "$NAME" --dockerfile Dockerfile.daytona --context . --cpu 4 --memory 8 --disk 50 --auto-stop 0
+  daytona create --name "$NAME" --dockerfile Dockerfile.daytona --context . --cpu 4 --memory 8 --disk 10 --volume "$VOLUME:/workspace" --auto-stop 0
 fi
-daytona exec "$NAME" -- bash -lc 'set -e; mkdir -p ~/.local/bin; npm config set prefix ~/.local; npm install -g t3@nightly @openai/codex; asset=amd64; [ "$(uname -m)" = aarch64 ] && asset=arm64; curl -fL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-$asset -o ~/.local/bin/cloudflared; chmod +x ~/.local/bin/cloudflared; printf "%s\n" "export PATH=\"$HOME/.local/bin:$PATH\"" "export OPENAI_BASE_URL=https://ai.tunly.cloud/v1" "export CODEX_API_BASE=https://ai.tunly.cloud/v1" >> ~/.bashrc; cp ~/.bashrc ~/.zshrc'
-echo "Ready: daytona ssh $NAME"
+daytona exec "$NAME" -- bash -lc 'printf "%s\n" "export OPENAI_BASE_URL=https://ai.tunly.cloud/v1" "export CODEX_API_BASE=https://ai.tunly.cloud/v1" >> ~/.bashrc; cp ~/.bashrc ~/.zshrc'
+echo "Ready: daytona ssh $NAME (50 GiB volume: /workspace)"

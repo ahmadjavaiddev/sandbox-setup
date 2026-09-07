@@ -14,13 +14,13 @@ Re-run anytime to sync N machines: `git pull && ./setup.sh` (idempotent, dotfile
 
 ## Daytona (one command)
 
-Create the 4 vCPU / 8 GiB RAM / 50 GiB disk sandbox:
+Create the 4 vCPU / 8 GiB RAM sandbox with a 50 GiB persistent volume at /workspace:
 
 `ash
 DAYTONA_API_KEY=\your-key\ ./bin/daytona-setup [sandbox-name]
 `
 
-The key is read from the environment and never written to the repository. The image-based sandbox uses explicit resources because Daytona does not allow disk overrides on snapshots. The sandbox installs git/gh, 3@nightly, and Codex CLI, with Codex pointed at https://ai.tunly.cloud/v1.
+The key is read from the environment and never written to the repository. The plan limits root disk to 10 GiB, so the launcher attaches a 50 GiB persistent volume at /workspace. The sandbox installs git/gh, 3@nightly, and Codex CLI, with Codex pointed at https://ai.tunly.cloud/v1.
 
 ## Daytona (zero setup per workspace)
 
