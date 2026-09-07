@@ -12,7 +12,7 @@ fi
 daytona login --api-key="$DAYTONA_API_KEY" >/dev/null
 if ! daytona volume get "$VOLUME" --format json >/dev/null 2>&1; then daytona volume create "$VOLUME" --size 50; fi
 if ! daytona info "$NAME" --format json >/dev/null 2>&1; then
-  daytona create --name "$NAME" --dockerfile Dockerfile.daytona --context . --cpu 4 --memory 8 --disk 10 --volume "$VOLUME:/workspace" --auto-stop 0
+  daytona create --name "$NAME" --dockerfile Dockerfile.daytona --context . --cpu 4 --memory 8 --disk 10 --volume "$VOLUME:/workspace" --auto-stop 45 --auto-archive 0
 fi
 daytona exec "$NAME" -- bash -lc 'printf "%s\n" "export OPENAI_BASE_URL=https://ai.tunly.cloud/v1" "export CODEX_API_BASE=https://ai.tunly.cloud/v1" >> ~/.bashrc; cp ~/.bashrc ~/.zshrc'
 echo "Ready: daytona ssh $NAME (50 GiB volume: /workspace)"
